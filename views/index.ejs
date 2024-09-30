@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify</title>
+    <link rel="stylesheet" href="../styles.css">   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ 
+</head>
+
+<header>
+    <h1>Spotify</h1>
+    <img src="/assets/spotlogo.png" alt="Logo">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify</title>
+    <link rel="stylesheet" href="/css/styles.css">  <!-- Link to your CSS file -->
+</header>
+<body>
+
+    <div class="container">
+        <!-- Left side: Music List -->
+        <div class="music-list">
+            <h2>Music List</h2>
+            <ul>
+                <% musicList.forEach(music => { %>
+                    <li class="music-item" onclick="playMusic('<%= '/uploads/' + music.file_path %>', '<%= music.title %>', '<%= music.artist %>')" style="cursor: pointer;">
+                        <span><%= music.title %> - <%= music.artist %></span>
+                        <a href="/delete/<%= music.id %>" class="delete-btn">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </li>                    
+                <% }) %>
+            </ul>
+        </div>
+        
+
+        <!-- Right side: Now Playing -->
+        <div class="now-playing">
+            <h2>Now Playing</h2>
+            <div id="now-playing-title">No music playing</div>
+            <div id="now-playing-artist"></div>
+        </div>
+    </div>
+
+    <!-- Footer: Music Player -->
+    <footer>
+        <audio id="music-player" controls>
+            <source id="music-source" src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        
+    </footer>
+
+    <script>
+        function playMusic(filePath, title, artist) {
+            var player = document.getElementById('music-player'); // Selects the audio player element
+            var source = document.getElementById('music-source'); // Selects the source element within the audio player
+    
+            // Set the new source for the player
+            source.src = filePath; // Updates the source of the audio player with the provided file path
+            player.load();  // Loads the new audio file into the player
+            
+            // Start playing the new audio file automatically
+            player.play(); // This line will start playback automatically
+    
+            // Update now playing section
+            document.getElementById('now-playing-title').innerText = title; // Update with the song title
+            document.getElementById('now-playing-artist').innerText = artist; // Update with the artist name
+        }
+    </script>
+    
+    
+    
+</body>
+</html>

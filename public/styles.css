@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #000000;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #000000;
+    color: white;
+    margin: 0;
+}
+
+h1 {
+    margin: 5px;
+}
+
+img {
+    max-width: 8%;
+    height: auto;
+}
+
+
+.container {
+    display: flex;
+    padding: 20px;
+}
+
+
+/*list*/
+
+.music-list {
+    flex: 2;
+    margin-right: 20px;
+    background-color: #212121;  /* Light background for contrast */
+    border-radius: 8px;          /* Rounded corners */
+    padding: 20px;               /* Inner spacing */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.music-list h2 {
+    text-align: center;          /* Center the heading */
+    color: #ffffff;                 /* Darker color for text */
+}
+
+.music-list ul {
+    list-style-type: none;      /* Remove default list style */
+    padding: 0;                 /* Remove default padding */
+    margin: 0;                  /* Remove default margin */
+}
+
+.music-item {
+    display: flex;              /* Use flexbox for layout */
+    justify-content: space-between; /* Space items evenly */
+    padding: 10px 5px;           /* Vertical spacing for items */
+    border-radius: 8px;
+    font-family: 'Verdana', sans-serif; /* List item font */
+    font-size: 18px;                    /* List item size */
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    
+}
+
+.music-item:last-child {
+    border-bottom: none;        /* Remove border from the last item */
+}
+
+.music-item:hover {
+    background-color: #444;     /* Change background color on hover */
+    color: #f0f0f0;             /* Change text color on hover */
+}
+
+.music-info {
+    flex: 1;                    /* Allow info to take available space */
+    color: #555;                /* Slightly lighter text color */
+}
+
+.delete-btn {
+    color: #000000; /* Trash can color */
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.delete-btn i {
+    font-size: 1.5rem; /* Size of the trash icon */
+}
+
+.delete-btn:hover {
+    color: #e60000; /* Color change on hover */
+    transform: scale(1.2); /* Slight scaling effect */
+}
+
+.delete-btn:hover i {
+    animation: shake 0.3s ease-in-out; /* Shake animation */
+}
+
+/* Keyframes for the shake effect */
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-15deg); }
+    100% { transform: rotate(0deg); }
+}
+
+
+
+
+.now-playing {
+    flex: 1;
+    margin-right: 20px;
+    background-color: #212121;  /* Light background for contrast */
+    border-radius: 8px;          /* Rounded corners */
+    padding: 20px;               /* Inner spacing */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}

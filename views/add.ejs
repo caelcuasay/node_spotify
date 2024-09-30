@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Music</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header>
+        <h1>Music Player</h1>
+        <img src="/path-to-your-logo.png" alt="Logo">
+    </header>
+
+    <h2>Add New Music</h2>
+    <form action="/add" method="POST" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="artist" placeholder="Artist" required>
+        <input type="file" name="mp3" accept=".mp3" required> <!-- Only allow .mp3 files -->
+        <button type="submit">Add Music</button>
+    </form>
+
+    <footer>
+        <a href="/">Back to Home</a>
+    </footer>
+</body>
+</html>
