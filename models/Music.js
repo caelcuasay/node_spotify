@@ -1,22 +1,39 @@
-const db = require('../config/db'); // Your database connection
+const db = require('../config/db');
 
 const Music = {
-    // Function to retrieve all music from the database
     getAllMusic: (callback) => {
-        const query = 'SELECT * FROM music';
-        db.query(query, callback);
+        const query = 'SELECT * FROM music ORDER BY created_at DESC';
+        db.query(query, (error, results) => {
+            if (error) {
+                console.error('Error fetching music:', error);
+            }
+            callback(error, results);
+        });
     },
 
-    // Function to add new music to the database
     addMusic: (data, callback) => {
-        const query = 'INSERT INTO music (title, artist, file_path) VALUES (?, ?, ?)';
-        db.query(query, [data.title, data.artist, data.file_path], callback);
+        const query = 'INSERT INTO music (title, artist, file_path, album_cover) VALUES (?, ?, ?, ?)';
+        db.query(query, [data.title, data.artist, data.file_path, data.album_cover], (error, results) => {
+            if (error) {
+                console.error('Error adding music:', error);
+            }
+            callback(error, results);
+        });
     },
 
-    // Function to delete a music entry by ID
     deleteMusic: (id, callback) => {
-        const query = 'DELETE FROM music WHERE id = ?';
-        db.query(query, [id], callback);
+        // First get the file paths to delete the actual files
+        const getPathsQuery = 'SELECT file_path, album_cover FROM music WHERE id = ?';
+        db.query(getPathsQuery, [id], (error, results) => {
+            if (error) {
+                return callback(error);
+            }
+            
+            const deleteQuery = 'DELETE FROM music WHERE id = ?';
+            db.query(deleteQuery, [id], (error, deleteResults) => {
+                callback(error, deleteResults, results[0]);
+            });
+        });
     }
 };
 

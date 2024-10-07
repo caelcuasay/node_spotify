@@ -6,39 +6,43 @@
     <title>Spotify</title>
     <link rel="stylesheet" href="../styles.css">   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- 
 </head>
-
-<header>
-    <h1>Spotify</h1>
-    <img src="/assets/spotlogo.png" alt="Logo">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify</title>
-    <link rel="stylesheet" href="/css/styles.css">  <!-- Link to your CSS file -->
-</header>
 <body>
+    <header>
+        <h1>Spotify</h1>
+        <img src="/assets/spotlogo.png" alt="Logo">
+    </header>
 
     <div class="container">
         <!-- Left side: Music List -->
         <div class="music-list">
-            <h2>Music List</h2>
+            <div class="music-list-header">
+                <h2>Music List</h2>
+                <a href="/add" class="add-music-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Music
+                </a>
+            </div>
             <ul>
-                <% musicList.forEach(music => { %>
-                    <li class="music-item" onclick="playMusic('<%= '/uploads/' + music.file_path %>', '<%= music.title %>', '<%= music.artist %>')" style="cursor: pointer;">
-                        <span><%= music.title %> - <%= music.artist %></span>
-                        <a href="/delete/<%= music.id %>" class="delete-btn">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                <% musicList.forEach((music, index) => { %>
+                    <li class="music-item" data-index="<%= index %>" 
+                        onclick="playMusic('<%= '/uploads/music/' + music.file_path %>', '<%= music.title %>', '<%= music.artist %>', '<%= '/uploads/covers/' + music.album_cover %>', <%= index %>)">
+                        <div class="music-info">
+                            <span><%= music.title %> - <%= music.artist %></span>
+                            <a href="/delete/<%= music.id %>" class="delete-btn" onclick="event.stopPropagation()">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </li>                    
                 <% }) %>
             </ul>
         </div>
-        
 
         <!-- Right side: Now Playing -->
         <div class="now-playing">
             <h2>Now Playing</h2>
+            <img id="now-playing-cover" src="/uploads/covers/default-album.jpg" 
+                 alt="Now playing" class="now-playing-cover">
             <div id="now-playing-title">No music playing</div>
             <div id="now-playing-artist"></div>
         </div>
@@ -46,32 +50,76 @@
 
     <!-- Footer: Music Player -->
     <footer>
-        <audio id="music-player" controls>
-            <source id="music-source" src="" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-        
+        <div class="player-controls">
+            <button class="control-btn" onclick="playPrevious()">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn" onclick="playNext()">
+                <i class="fas fa-step-forward"></i>
+            </button>
+            <audio id="music-player" controls>
+                <source id="music-source" src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </footer>
 
     <script>
-        function playMusic(filePath, title, artist) {
-            var player = document.getElementById('music-player'); // Selects the audio player element
-            var source = document.getElementById('music-source'); // Selects the source element within the audio player
-    
-            // Set the new source for the player
-            source.src = filePath; // Updates the source of the audio player with the provided file path
-            player.load();  // Loads the new audio file into the player
+        let currentIndex = -1;
+        const musicList = [
+            <% musicList.forEach(music => { %>
+                {
+                    path: '<%= "/uploads/music/" + music.file_path %>',
+                    title: '<%= music.title %>',
+                    artist: '<%= music.artist %>',
+                    cover: '<%= "/uploads/covers/" + music.album_cover %>'
+                },
+            <% }); %>
+        ];
+
+        function playMusic(filePath, title, artist, coverPath, index) {
+            currentIndex = index;
+            var player = document.getElementById('music-player');
+            var source = document.getElementById('music-source');
+            var cover = document.getElementById('now-playing-cover');
             
-            // Start playing the new audio file automatically
-            player.play(); // This line will start playback automatically
-    
-            // Update now playing section
-            document.getElementById('now-playing-title').innerText = title; // Update with the song title
-            document.getElementById('now-playing-artist').innerText = artist; // Update with the artist name
+            source.src = filePath;
+            cover.src = coverPath;
+            player.load();
+            player.play();
+            
+            updateNowPlaying(title, artist);
         }
+
+        function updateNowPlaying(title, artist) {
+            document.getElementById('now-playing-title').innerText = title;
+            document.getElementById('now-playing-artist').innerText = artist;
+        }
+
+        function playNext() {
+            if (currentIndex < musicList.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            const nextSong = musicList[currentIndex];
+            playMusic(nextSong.path, nextSong.title, nextSong.artist, nextSong.cover, currentIndex);
+        }
+
+        function playPrevious() {
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else {
+                currentIndex = musicList.length - 1;
+            }
+            const prevSong = musicList[currentIndex];
+            playMusic(prevSong.path, prevSong.title, prevSong.artist, prevSong.cover, currentIndex);
+        }
+
+        // Add event listener for when a song ends
+        document.getElementById('music-player').addEventListener('ended', function() {
+            playNext();
+        });
     </script>
-    
-    
-    
 </body>
 </html>
